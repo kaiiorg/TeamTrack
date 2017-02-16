@@ -26,7 +26,9 @@ namespace TeamTrack
         static string[] times = { "3:00", "3:00", "4:00", "4:00", "3:00", "3:00", "4:00", "4:00" };
         static int[] arenas = { 1, 1, 2, 2, 3, 3, 4, 4};
         static int teamCount = 8;
+
         
+
         //Add test data
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -43,6 +45,18 @@ namespace TeamTrack
             }
             //Clear the selection because it is a pain in the ass
             DivisionGridView1.ClearSelection();
+        }
+
+        //Exit menu option
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        //Load from .CSV
+        private void fromCSVToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
 
         //Change the color of the status cell if it is clicked.
