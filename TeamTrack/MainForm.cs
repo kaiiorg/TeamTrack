@@ -56,7 +56,27 @@ namespace TeamTrack
         //Load from .CSV
         private void fromCSVToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            int teamCount = 0;
+            List<Team> teams = LoadFile.fromCSV(ref teamCount);
+            foreach (Team team in teams)
+            {
+                //Clear out the rows from the grid view
+                DivisionGridView1.Rows.Clear();
 
+                for (int i = 0; i < teamCount; ++i)
+                {
+                    int rowID = DivisionGridView1.Rows.Add();
+                    DataGridViewRow row = DivisionGridView1.Rows[rowID];
+
+                    row.Cells[0].Value = team.TeamName;
+                    row.Cells[1].Value = statusText[0];
+                    row.Cells[1].Style.BackColor = Color.White;
+                    row.Cells[2].Value = team.Time;
+                    row.Cells[3].Value = team.Arena;
+                }
+                //Clear the selection because it is a pain in the ass
+                DivisionGridView1.ClearSelection();
+            }
         }
 
         //Change the color of the status cell if it is clicked.
