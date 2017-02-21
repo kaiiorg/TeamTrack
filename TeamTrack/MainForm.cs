@@ -18,7 +18,7 @@ namespace TeamTrack
         }
         //Status Colors and the current status of each team
         Color[] statusColors = { Color.White, Color.Yellow, Color.Red, Color.Green };
-        string[] statusText = { "Unregistered", "Registered", "Inspection", "Ready!" };
+        string[] statusText = { "No Inspect", "Hardware Ok", "Inspect Fail", "Ready!" };
         int[] currentStatus = { 0, 0, 0, 0, 0, 0, 0, 0};
         
         //Test data
@@ -58,38 +58,44 @@ namespace TeamTrack
         {
             int teamCount = 0;
             List<Team> teams = LoadFile.fromCSV(ref teamCount);
+            //Clear out the rows from the grid view
+            DivisionGridView1.Rows.Clear();
+
             foreach (Team team in teams)
             {
-                //Clear out the rows from the grid view
-                DivisionGridView1.Rows.Clear();
+                int rowID = DivisionGridView1.Rows.Add();
+                DataGridViewRow row = DivisionGridView1.Rows[rowID];
 
-                for (int i = 0; i < teamCount; ++i)
-                {
-                    int rowID = DivisionGridView1.Rows.Add();
-                    DataGridViewRow row = DivisionGridView1.Rows[rowID];
-
-                    row.Cells[0].Value = team.TeamName;
-                    row.Cells[1].Value = statusText[0];
-                    row.Cells[1].Style.BackColor = Color.White;
-                    row.Cells[2].Value = team.Time;
-                    row.Cells[3].Value = team.Arena;
-                }
+                row.Cells[0].Value = team.TeamName;
+                row.Cells[1].Value = statusText[0];
+                row.Cells[1].Style.BackColor = Color.White;
+                row.Cells[2].Value = team.Time;
+                row.Cells[3].Value = team.Station;
                 //Clear the selection because it is a pain in the ass
                 DivisionGridView1.ClearSelection();
             }
+
         }
 
-        //Change the color of the status cell if it is clicked.
-        private void DivisionGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        //Change the color of the cell clicked. 
+        private void DivisionGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             //Only change the color of the cell if it is in the status column and if the header isn't clicked.
             if (e.ColumnIndex == 1 && e.RowIndex != -1)
             {
-                //Update the currentStatus array
-                currentStatus[e.RowIndex] = (currentStatus[e.RowIndex] + 1) % 4;
+                //Update the currentStatus array add if left click, subtract if right clicked.
+                if (e.Button == MouseButtons.Left)
+                    currentStatus[e.RowIndex] = (currentStatus[e.RowIndex] + 1) % 4;
+                else
+                {
+                    if (currentStatus[e.RowIndex] - 1 < 0)
+                        currentStatus[e.RowIndex] = 3;
+                    else
+                        currentStatus[e.RowIndex]--;
+                }
 
                 //Change the color of the selected row
-                DivisionGridView1.Rows[e.RowIndex].Cells[1].Style.BackColor = 
+                DivisionGridView1.Rows[e.RowIndex].Cells[1].Style.BackColor =
                     statusColors[currentStatus[e.RowIndex]];
                 //Update the status text in the selected row
                 DivisionGridView1.Rows[e.RowIndex].Cells[1].Value = statusText[currentStatus[e.RowIndex]];

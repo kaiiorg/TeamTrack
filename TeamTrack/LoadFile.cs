@@ -28,7 +28,7 @@ namespace TeamTrack
             {
                 StreamReader file = new StreamReader(ofd.OpenFile());
                 List<string> lines = new List<string>();
-                Team tempTeam = new Team();
+                
                 
                 //Read each line and add to the lines list
                 while(!file.EndOfStream)
@@ -47,18 +47,19 @@ namespace TeamTrack
                     //If the divsion name hasn't been read yet, it should be read now assuming the last two if statements worked.
                     if (s.Length == 1 && divison == "")
                         divison = s[0];
-                    //Skip the "Team Name Time Arena" header
-                    if (s.Length == 3 && s[0] == "Team Name")
+                    //Skip the "Team Name,Team Number,Time,Station" header
+                    if (s.Length == 4 && s[0] == "Team Name")
                         continue;
                     //Sanity check; each of the last lines should have 3 elements
-                    if (s.Length == 3)
+                    if (s.Length == 4)
                     {
+                        Team tempTeam = new Team();
                         tempTeam.Divison = divison;
                         tempTeam.TeamName = s[0];
-                        tempTeam.Time = s[1];
-                        tempTeam.Arena = s[2];
+                        tempTeam.TeamNumber = s[1];
+                        tempTeam.Time = s[2];
+                        tempTeam.Station = s[3];
                         teams.Add(tempTeam);
-                        tempTeam.clear();
                         teamCount++;
                     }
                 }
@@ -79,17 +80,20 @@ namespace TeamTrack
     class Team
     {
         //Name of the team
-        private string teamName = "";
+        private string _teamName = "";
         public string TeamName { set; get; }
+        //Team number
+        private string _teamNumber = "";
+        public string TeamNumber { set; get; }
         //Name of the team's division
-        private string divison = "";
+        private string _divison = "";
         public string Divison { set; get; }
-        //Time of team's first match
-        private string time = "";
+        //Time of team's inspection time
+        private string _time = "";
         public string Time { get; set; }
         //Arena number of team's first match
-        private string arena = "";
-        public string Arena { get; set; }
+        private string _station = "";
+        public string Station { get; set; }
 
         public Team() { clear(); }
 
@@ -101,7 +105,7 @@ namespace TeamTrack
             TeamName = "";
             Divison = "";
             Time = "";
-            Arena = "";
+            Station = "";
         }
     }
 }
