@@ -80,19 +80,14 @@ namespace TeamTrack
     class Team
     {
         //Name of the team
-        private string _teamName = "";
         public string TeamName { set; get; }
         //Team number
-        private string _teamNumber = "";
         public string TeamNumber { set; get; }
         //Name of the team's division
-        private string _divison = "";
         public string Divison { set; get; }
         //Time of team's inspection time
-        private string _time = "";
         public string Time { get; set; }
-        //Arena number of team's first match
-        private string _station = "";
+        //Name of team's inspection station
         public string Station { get; set; }
 
         public Team() { clear(); }

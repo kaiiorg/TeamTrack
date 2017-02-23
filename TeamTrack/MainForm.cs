@@ -19,7 +19,7 @@ namespace TeamTrack
         //Status Colors and the current status of each team
         Color[] statusColors = { Color.White, Color.Yellow, Color.Red, Color.Green };
         string[] statusText = { "No Inspect", "Hardware Ok", "Inspect Fail", "Ready!" };
-        int[] currentStatus = { 0, 0, 0, 0, 0, 0, 0, 0};
+        //int[] currentStatus = { 0, 0, 0, 0, 0, 0, 0, 0};
         
         //Test data
         static string[] teams = { "Team 1", "Team 2", "Team 3", "Team 4", "Team 5", "Team 6", "Team 7", "Team 1337" };
@@ -72,10 +72,11 @@ namespace TeamTrack
                 row.Cells[1].Style.BackColor = Color.White;
                 row.Cells[2].Value = team.Time;
                 row.Cells[3].Value = team.Station;
-                //Clear the selection because it is a pain in the ass
-                DivisionGridView1.ClearSelection();
+                divisionLabel1.Text = team.Divison;
             }
 
+            //Clear the selection because it is a pain in the ass
+            DivisionGridView1.ClearSelection();
         }
 
         //Change the color of the cell clicked. 
@@ -84,22 +85,51 @@ namespace TeamTrack
             //Only change the color of the cell if it is in the status column and if the header isn't clicked.
             if (e.ColumnIndex == 1 && e.RowIndex != -1)
             {
-                //Update the currentStatus array add if left click, subtract if right clicked.
+
+                //Change the color to the next color if the left mouse button is clicked
                 if (e.Button == MouseButtons.Left)
-                    currentStatus[e.RowIndex] = (currentStatus[e.RowIndex] + 1) % 4;
+                {
+                    //White -> Yellow
+                    //Yellow -> Red
+                    //Red -> Green
+                    //Green -> White
+                    for(int i = 0; i < 4; ++i)
+                    {
+                        if (DivisionGridView1.Rows[e.RowIndex].Cells[1].Style.BackColor == statusColors[i])
+                        {
+                            DivisionGridView1.Rows[e.RowIndex].Cells[1].Style.BackColor = statusColors[(i + 1) % 4];
+                            DivisionGridView1.Rows[e.RowIndex].Cells[1].Value = statusText[(i + 1) % 4];
+                            break;
+                        }
+                    }
+                }
+                //Change the color to the last color if the right mouse button is clicked
                 else
                 {
-                    if (currentStatus[e.RowIndex] - 1 < 0)
-                        currentStatus[e.RowIndex] = 3;
-                    else
-                        currentStatus[e.RowIndex]--;
-                }
+                    //White -> Green
+                    if (DivisionGridView1.Rows[e.RowIndex].Cells[1].Style.BackColor == statusColors[0])
+                    {
+                        DivisionGridView1.Rows[e.RowIndex].Cells[1].Style.BackColor = statusColors[3];
+                        DivisionGridView1.Rows[e.RowIndex].Cells[1].Value = statusText[3];
+                        //Clear the selection because it is a pain in the ass
+                        DivisionGridView1.ClearSelection();
+                        return;
+                    }
 
-                //Change the color of the selected row
-                DivisionGridView1.Rows[e.RowIndex].Cells[1].Style.BackColor =
-                    statusColors[currentStatus[e.RowIndex]];
-                //Update the status text in the selected row
-                DivisionGridView1.Rows[e.RowIndex].Cells[1].Value = statusText[currentStatus[e.RowIndex]];
+                    //Green -> Red
+                    //Red -> Yellow
+                    //Yellow -> White
+                    for (int i = 1; i < 4; ++i)
+                    {
+                        if (DivisionGridView1.Rows[e.RowIndex].Cells[1].Style.BackColor == statusColors[i])
+                        {
+                            DivisionGridView1.Rows[e.RowIndex].Cells[1].Style.BackColor = statusColors[i - 1];
+                            DivisionGridView1.Rows[e.RowIndex].Cells[1].Value = statusText[i - 1];
+                            break;
+                        }
+                    }
+                    
+                }
 
                 //Clear the selection because it is a pain in the ass
                 DivisionGridView1.ClearSelection();
