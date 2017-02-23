@@ -67,6 +67,7 @@ namespace TeamTrack
                 DataGridViewRow row = DivisionGridView1.Rows[rowID];
 
                 row.Cells[0].Value = team.TeamName;
+                //team.TeamNumber;
                 row.Cells[1].Value = statusText[0];
                 row.Cells[1].Style.BackColor = Color.White;
                 row.Cells[2].Value = team.Time;
