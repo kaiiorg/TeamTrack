@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 
@@ -18,7 +15,6 @@ namespace TeamTrack
         {
             List<Team> teams = new List<Team>();
             teamCount = 0;
-            string divison = "";
             
 
             OpenFileDialog ofd = new OpenFileDialog();
@@ -41,20 +37,14 @@ namespace TeamTrack
                     //Skip any lines that only have two items in it. They aren't needed at this time
                     if (s.Length == 2)
                         continue;
-                    //Skip over the Divison Name: header
-                    if (s.Length == 1 && s[0] == "Division Name:")
-                        continue;
-                    //If the divsion name hasn't been read yet, it should be read now assuming the last two if statements worked.
-                    if (s.Length == 1 && divison == "")
-                        divison = s[0];
-                    //Skip the "Team Name,Team Number,Time,Station" header
-                    if (s.Length == 4 && s[0] == "Team Name")
+                    //Skip the "Team Name,Team Number,Time,Station,Dvision Name" header
+                    if (s.Length == 5 && s[0] == "Team Name")
                         continue;
                     //Sanity check; each of the last lines should have 3 elements
-                    if (s.Length == 4)
+                    if (s.Length == 5)
                     {
                         Team tempTeam = new Team();
-                        tempTeam.Divison = divison;
+                        tempTeam.Divison = s[4];
                         tempTeam.TeamName = s[0];
                         tempTeam.TeamNumber = s[1];
                         tempTeam.Time = s[2];
